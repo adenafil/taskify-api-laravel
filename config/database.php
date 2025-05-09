@@ -40,6 +40,10 @@ return [
             'busy_timeout' => null,
             'journal_mode' => null,
             'synchronous' => null,
+            'options' => [
+                'timeout' => 60, // Increase timeout
+            ],
+
         ],
 
         'mysql' => [
