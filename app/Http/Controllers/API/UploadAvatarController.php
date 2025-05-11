@@ -17,10 +17,14 @@ class UploadAvatarController extends Controller
 
         if ($request->hasFile('avatar'))
         {
-            $imageData = file_get_contents($request->file('avatar'));
-            $base64 = base64_encode($imageData);
+            $file = $request->file('avatar');
+            $imageData = file_get_contents($file);
+            $mimeType = $file->getMimeType();
+            $base64 = "data:{$mimeType};base64," . base64_encode($imageData);
+
             $user->avatar = $base64;
             $user->save();
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Avatar uploaded successfully',

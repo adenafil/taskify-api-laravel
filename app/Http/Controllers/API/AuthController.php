@@ -73,7 +73,17 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $user = $request->user();
         $request->user()->currentAccessToken()->delete();
+
+        // Log user activity 🎵 karoekan
+        UserActivity::create([
+            'user_id' => $user->id,
+            'action' => 'logout',
+            'ip_address' => $request->ip(),
+            'device' => $request->header('User-Agent')
+        ]);
+
 
         return response()->json([
             'status' => 'success',
@@ -88,4 +98,5 @@ class AuthController extends Controller
             'data' => $request->user()
         ]);
     }
+
 }
