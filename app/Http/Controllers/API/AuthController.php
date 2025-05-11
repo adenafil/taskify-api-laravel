@@ -99,4 +99,32 @@ class AuthController extends Controller
         ]);
     }
 
+    public function patchProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|max:255|unique:users,email,' . $request->user()->id,
+            'bio' => 'sometimes|nullable|string',
+            'location' => 'sometimes|nullable|string',
+        ]);
+
+        $user = $request->user();
+        $user->update($request->only('name', 'email', 'bio', 'location'));
+        $user->save();
+
+        // Log user activity 🎵 karoekan
+        UserActivity::create([
+            'user_id' => $user->id,
+            'action' => 'profile_update',
+            'ip_address' => $request->ip(),
+            'device' => $request->header('User-Agent')
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Profile updated successfully',
+            'user' => $user
+        ]);
+    }
+
 }

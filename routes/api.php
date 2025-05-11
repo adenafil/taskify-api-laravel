@@ -25,4 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::patch('/user/change-password', [PasswordController::class, 'changePassword']);
 
+    Route::patch('/user/update-profile', [AuthController::class, 'patchProfile']);
+
 });
