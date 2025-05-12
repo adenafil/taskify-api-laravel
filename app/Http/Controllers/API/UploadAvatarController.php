@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserActivity;
 use Illuminate\Http\Request;
 
 class UploadAvatarController extends Controller
@@ -39,8 +40,6 @@ class UploadAvatarController extends Controller
                 'avatar' => $base64
             ], 200);
         }
-
-
 
         return response()->json([
             'status' => 'error',

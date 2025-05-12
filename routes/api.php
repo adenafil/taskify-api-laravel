@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\PasswordController;
+use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\UploadAvatarController;
 use App\Http\Controllers\API\UserActivityController;
 use Illuminate\Support\Facades\Route;
@@ -26,5 +27,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/user/change-password', [PasswordController::class, 'changePassword']);
 
     Route::patch('/user/update-profile', [AuthController::class, 'patchProfile']);
+
+    Route::post('/tasks', [TaskController::class, 'store']);
+    Route::get('/tasks', [TaskController::class, 'get']);
+    Route::patch('/tasks/{id}', [TaskController::class, 'update']);
+    Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 
 });
