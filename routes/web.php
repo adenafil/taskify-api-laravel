@@ -8,7 +8,7 @@ Route::get('/', function () {
 });
 
 Route::get('/login/{service}', [AuthSocialiteController::class, 'redirect']);
-Route::get('/login/{service}/callback', [AuthSocialiteController::class, 'callback']);
+Route::post('/login/{service}/callback', [AuthSocialiteController::class, 'callback']);
 
 
 Route::get('/callback/{service}', [AuthSocialiteController::class, 'callback']);
