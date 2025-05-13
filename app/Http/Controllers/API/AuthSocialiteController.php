@@ -29,8 +29,10 @@ class AuthSocialiteController extends Controller
         try {
             $socialUser = Socialite::driver($service)->stateless()->user();
 
+
             $existingUser = User::where('social_id', $socialUser->id)
                 ->where('social_type', $service)
+                ->orWhere('email', $socialUser->email)
                 ->first();
 
             if (!$existingUser) {
