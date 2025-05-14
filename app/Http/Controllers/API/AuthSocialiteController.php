@@ -64,7 +64,8 @@ class AuthSocialiteController extends Controller
             return redirect()->away(env('FE_APP_URL') . "/auth/callback?token=$token");
         } catch (\Exception $e) {
             Log::error($e); // Jangan dd(), gunakan log
-            dd($e);
+
+            return redirect()->away(env('FE_APP_URL') . '/auth/error?message=' . urlencode('Authentication failed. Please try again ☺️.'));
         }
     }
 }
