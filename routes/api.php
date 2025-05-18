@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CronjobController;
 use App\Http\Controllers\API\PasswordController;
 use App\Http\Controllers\API\PasswordResetController;
 use App\Http\Controllers\API\TaskController;
@@ -19,6 +20,9 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
 Route::post('/is-token-valid', [PasswordResetController::class, 'isTokenValid']);
+
+
+Route::get('/cron/update-expired-task', [CronjobController::class, 'updateExpiredTask']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
