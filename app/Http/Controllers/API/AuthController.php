@@ -52,7 +52,7 @@ class AuthController extends Controller
         }
 
         // Revoke old tokens if you want users to have only one active token
-         $user->tokens()->delete();
+        $user->tokens()->delete();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         // Log user activity 🎵 karoekan
@@ -127,4 +127,16 @@ class AuthController extends Controller
         ]);
     }
 
+    public function deleteAccount(Request $request)
+    {
+        $user = $request->user();
+        $user->tasks()->delete();
+        $user->userActivity()->delete();
+        $user->delete();
+        $user->tokens()->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Account deleted successfully'
+        ]);
+    }
 }

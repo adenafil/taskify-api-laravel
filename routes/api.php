@@ -25,6 +25,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
 
+    Route::delete('/user/delete', [AuthController::class, 'deleteAccount']);
+
     Route::get('/user/activity', [UserActivityController::class, 'getUserActivity']);
 
     Route::post('/user/upload-avatar', [UploadAvatarController::class, 'uploadAvatar']);

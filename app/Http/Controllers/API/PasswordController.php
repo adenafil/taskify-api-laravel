@@ -19,8 +19,12 @@ class PasswordController extends Controller
 
         $user = $request->user();
 
+        // Cek apakah ini pengguna OAuth yang belum pernah mengatur password sendiri
+        $isNewOauthUser = !empty($user->social_id) && !empty($user->social_type) &&
+            $user->password_updated_at === null;
+
         // Check if current password is correct
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (!$isNewOauthUser && !Hash::check($request->current_password, $user->password)) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Current password is incorrect',
@@ -29,6 +33,7 @@ class PasswordController extends Controller
 
         // Update password
         $user->password = Hash::make($request->password);
+        $user->password_updated_at = now();
         $user->save();
 
         // Log the password change activity
