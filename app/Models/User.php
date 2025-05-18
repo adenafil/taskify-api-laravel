@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\CustomResetPasswordNotification;
+
 
 class User extends Authenticatable
 {
@@ -62,5 +64,12 @@ class User extends Authenticatable
     public function userActivity(): HasMany
     {
         return $this->hasMany(UserActivity::class, 'user_id', 'id');
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $url = env('FE_APP_URL') . '/reset-password?token=' . $token . '&email=' . $this->email;
+
+        $this->notify(new CustomResetPasswordNotification($url));
     }
 }

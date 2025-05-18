@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\AuthSocialiteController;
 use App\Http\Controllers\API\PasswordController;
+use App\Http\Controllers\API\PasswordResetController;
 use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\UploadAvatarController;
 use App\Http\Controllers\API\UserActivityController;
@@ -16,7 +16,9 @@ Route::get('/', function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
+Route::post('/is-token-valid', [PasswordResetController::class, 'isTokenValid']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
