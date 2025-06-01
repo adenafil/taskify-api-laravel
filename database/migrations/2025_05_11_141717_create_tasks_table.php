@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('description')->nullable();
+            $table->string('category')->nullable()->default("Home");
+            $table->string('categoryIcon')->nullable()->default("i-heroicons-home");
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             $table->enum('status', ['in_progress', 'completed', 'expired'])->default('in_progress');
             $table->timestamp('due_date');

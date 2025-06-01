@@ -14,6 +14,8 @@ class TaskController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'category' => 'nullable|string|max:255',
+            'categoryIcon' => 'nullable|string|max:255',
             'due_date' => 'required|date',
             'priority' => 'nullable|string|in:low,medium,high',
             'status' => 'nullable|string|in:in_progress,completed,expired',
@@ -24,6 +26,8 @@ class TaskController extends Controller
         $task = new Task();
         $task->title = $request->input('title');
         $task->description = $request->input('description');
+        $task->category = $request->input('category', 'Home');
+        $task->categoryIcon = $request->input('categoryIcon', 'i-heroicons-home');
         $task->due_date = $request->input('due_date');
         $task->priority = $request->input('priority', 'medium'); // Default to 'priority' if not provided dawg
         $task->status = $request->input('status', 'in_progress'); // Default to 'in progress' if not provided dawg
@@ -50,8 +54,8 @@ class TaskController extends Controller
 
         // Apply status filter
         if ($status !== 'all') {
-                // For in_progress or completed status
-                $query->where('status', $status);
+            // For in_progress or completed status
+            $query->where('status', $status);
         }
 
         // Apply priority filter if provided
@@ -61,7 +65,7 @@ class TaskController extends Controller
 
         // Apply search if provided
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
                     ->orWhere('priority', 'like', "%{$search}%")
@@ -74,11 +78,14 @@ class TaskController extends Controller
             ->paginate($perPage);
 
         return new TaskCollection($tasks);
-    }    public function update(Request $request, $id)
+    }
+    public function update(Request $request, $id)
     {
         $request->validate([
             'title' => 'sometimes|required|string|max:255',
             'description' => 'sometimes|required|string',
+            'category' => 'nullable|string|max:255',
+            'categoryIcon' => 'nullable|string|max:255',
             'due_date' => 'sometimes|required|date',
             'priority' => 'sometimes|nullable|string|in:low,medium,high',
             'status' => 'sometimes|nullable|string|in:in_progress,completed',
@@ -95,8 +102,9 @@ class TaskController extends Controller
         }
 
         // Only update fields that are present in the request
-        $updatableFields = ['title', 'description', 'due_date', 'priority', 'status'];
+        $updatableFields = ['title', 'description', 'category', 'categoryIcon', 'due_date', 'priority', 'status'];
         $updateData = [];
+
 
         foreach ($updatableFields as $field) {
             if ($request->has($field)) {
@@ -132,5 +140,18 @@ class TaskController extends Controller
             'message' => 'Task deleted successfully'
         ]);
     }
-}
 
+    public function getCategoryUser(Request $request)
+    {
+        $user = $request->user();
+        $categories = Task::select(['category', 'categoryIcon'])->where('user_id', $user->id)->groupBy('category')
+            ->get();
+
+
+        return response()->json([
+            'status' => 'success',
+            'categories' => $categories
+        ]);
+    }
+
+}

@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::patch('/user/update-profile', [AuthController::class, 'patchProfile']);
 
+    Route::get('/task/categories', [TaskController::class, 'getCategoryUser']);
     Route::post('/tasks', [TaskController::class, 'store']);
     Route::get('/tasks', [TaskController::class, 'get']);
     Route::patch('/tasks/{id}', [TaskController::class, 'update']);
