@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CronjobController;
+use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\PasswordController;
 use App\Http\Controllers\API\PasswordResetController;
 use App\Http\Controllers\API\TaskController;
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return response()->json(['message' => 'API is working']);
 });
+
+Route::get('/vapid-public-key', function () {
+    return response()->json([
+        'publicKey' => config('webpush.vapid.public_key')
+    ]);
+});
+
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -44,4 +52,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tasks', [TaskController::class, 'get']);
     Route::patch('/tasks/{id}', [TaskController::class, 'update']);
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
+
+    // notification mabar
+    Route::post('/notifications/subscribe', [NotificationController::class, 'subscribe']);
+    Route::post('/notifications/unsubscribe', [NotificationController::class, 'unsubscribe']);
 });

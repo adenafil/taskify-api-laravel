@@ -72,4 +72,9 @@ class User extends Authenticatable
 
         $this->notify(new CustomResetPasswordNotification($url));
     }
+
+    public function pushSubscriptions(): HasMany
+    {
+        return $this->hasMany(PushSubscription::class);
+    }
 }
