@@ -25,12 +25,6 @@ jobs:
 
     - uses: actions/checkout@v4
 
-    - name: Cache Composer dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.composer/cache/files
-        key: dependencies-composer-${{ hashFiles('**/composer.lock') }}
-
     - name: Copy .env.example to .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
@@ -61,8 +55,8 @@ jobs:
         mkdir -p database
         touch database/database.sqlite
 
-    - name: Execute tests
+    - name: Execute tests (Feature tests)
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: php artisan test 
+      run: php artisan test
