@@ -32,8 +32,8 @@ jobs:
         PUBLIC_KEY=$(echo "$VAPID_KEYS" | grep 'Public key:' | cut -d ' ' -f 3-)
         PRIVATE_KEY=$(echo "$VAPID_KEYS" | grep 'Private key:' | cut -d ' ' -f 3-)
 
-    echo "VAPID_PUBLIC_KEY=$PUBLIC_KEY" >> .env
-    echo "VAPID_PRIVATE_KEY=$PRIVATE_KEY" >> .env
+        echo "VAPID_PUBLIC_KEY=$PUBLIC_KEY" >> .env
+        echo "VAPID_PRIVATE_KEY=$PRIVATE_KEY" >> .env
 
     - name: Install Composer dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
