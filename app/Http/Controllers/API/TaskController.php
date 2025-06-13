@@ -5,7 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskCollection;
 use App\Models\Task;
+use App\Models\User;
+use App\Exports\TasksExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TaskController extends Controller
 {
@@ -152,6 +155,36 @@ class TaskController extends Controller
             'status' => 'success',
             'categories' => $categories
         ]);
+    }
+
+    public function exportToExcel(Request $request)
+    {
+        // Jika tidak ada userId di parameter, gunakan user yang sedang login
+        $targetUserId = $request->user()->id;
+
+        // Cek apakah user exists
+        $user = User::find($targetUserId);
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        // Cek apakah user memiliki tasks
+        $taskCount = Task::where('user_id', $targetUserId)->count();
+        if ($taskCount === 0) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No tasks found for this user'
+            ], 404);
+        }
+
+        // Generate filename
+        $filename = 'tasks_' . $user->name . '_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
+
+        // Export dan download
+        return Excel::download(new TasksExport($targetUserId), $filename);
     }
 
 }

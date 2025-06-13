@@ -53,6 +53,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/tasks/{id}', [TaskController::class, 'update']);
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 
+    Route::get('/my-tasks/export', [TaskController::class, 'exportToExcel']); // Export current user tasks
+
     // notification mabar
     Route::post('/notifications/subscribe', [NotificationController::class, 'subscribe']);
     Route::post('/notifications/unsubscribe', [NotificationController::class, 'unsubscribe']);
