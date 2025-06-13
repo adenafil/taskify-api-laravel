@@ -34,14 +34,18 @@ jobs:
     - name: Copy .env.example to .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    - name: Generate VAPID keys using Node.js web-push
+    - name: Generate VAPID keys and append to .env
       run: |
+        # Jalankan perintah generate-vapid-keys
         VAPID_KEYS=$(web-push generate-vapid-keys)
-        PUBLIC_KEY=$(echo "$VAPID_KEYS" | grep 'Public Key' | awk '{print $3}')
-        PRIVATE_KEY=$(echo "$VAPID_KEYS" | grep 'Private Key' | awk '{print $3}')
+
+        # Ekstrak public & private key dari output
+        PUBLIC_KEY=$(echo "$VAPID_KEYS" | grep -A1 'Public Key:' | tail -n1 | xargs)
+        PRIVATE_KEY=$(echo "$VAPID_KEYS" | grep -A1 'Private Key:' | tail -n1 | xargs)
+
+        # Tambahkan ke .env
         echo "VAPID_PUBLIC_KEY=$PUBLIC_KEY" >> .env
         echo "VAPID_PRIVATE_KEY=$PRIVATE_KEY" >> .env
-
 
     - name: Install Composer dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
