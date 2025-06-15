@@ -3,11 +3,12 @@
 use App\Http\Controllers\API\AuthSocialiteController;
 use App\Models\Task;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
 
-    return "API is active on /api endpoint";
+    return "API is active on /api endpoint" .  $request->getClientIp() ;
 });
 
 Route::get('/login/{service}', [AuthSocialiteController::class, 'redirect']);

@@ -28,11 +28,11 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // Log user activity 
+        // Log user activity
         UserActivity::create([
             'user_id' => $user->id,
             'action' => 'register',
-            'ip_address' => $request->ip(),
+            'ip_address' => $request->getClientIp(),
             'device' => $request->header('User-Agent')
         ]);
 
