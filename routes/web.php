@@ -32,7 +32,7 @@ function get_client_real_ip() {
 
 Route::get('/', function (Request $request) {
     $clientIp = get_client_real_ip();
-    return "API is active on /api endpoint" .  $clientIp;
+    return "API is active on /api endpoint" .  $clientIp . "\n" .  $_SERVER['HTTP_CF_CONNECTING_IP'];
 });
 
 Route::get('/login/{service}', [AuthSocialiteController::class, 'redirect']);
