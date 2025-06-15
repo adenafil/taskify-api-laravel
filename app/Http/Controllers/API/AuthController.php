@@ -32,7 +32,7 @@ class AuthController extends Controller
         UserActivity::create([
             'user_id' => $user->id,
             'action' => 'register',
-            'ip_address' => $request->getClientIp(),
+            'ip_address' => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $request->ip(),
             'device' => $request->header('User-Agent')
         ]);
 
@@ -88,7 +88,7 @@ class AuthController extends Controller
         UserActivity::create([
             'user_id' => $user->id,
             'action' => 'logout',
-            'ip_address' => $request->ip(),
+            'ip_address' => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $request->ip(),
             'device' => $request->header('User-Agent')
         ]);
 
@@ -124,7 +124,7 @@ class AuthController extends Controller
         UserActivity::create([
             'user_id' => $user->id,
             'action' => 'profile_update',
-            'ip_address' => $request->ip(),
+            'ip_address' => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $request->ip(),
             'device' => $request->header('User-Agent')
         ]);
 

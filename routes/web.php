@@ -6,33 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-function get_client_real_ip() {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        // IP dari shared ISP
-        return $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        // IP dari proxy
-        $ip_list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-        foreach ($ip_list as $ip) {
-            $ip = trim($ip);
-            if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                return $ip;
-            }
-        }
-    } elseif (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
-        // IP dari Cloudflare
-        return $_SERVER['HTTP_CF_CONNECTING_IP'];
-    } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
-        // Fallback ke REMOTE_ADDR
-        return $_SERVER['REMOTE_ADDR'];
-    }
-
-    return null;
-}
 
 Route::get('/', function (Request $request) {
-    $clientIp = get_client_real_ip();
-    return "API is active on /api endpoint" .  $clientIp . "\n" .  $_SERVER['HTTP_CF_CONNECTING_IP'];
+    return "API is active on /api endpoint" .  $_SERVER['HTTP_CF_CONNECTING_IP'];
 });
 
 Route::get('/login/{service}', [AuthSocialiteController::class, 'redirect']);

@@ -40,7 +40,7 @@ class PasswordController extends Controller
         UserActivity::create([
             'user_id' => $user->id,
             'action' => 'password_change',
-            'ip_address' => $request->ip(),
+            'ip_address' => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $request->ip(),
             'device' => $request->header('User-Agent')
         ]);
 

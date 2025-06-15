@@ -46,14 +46,14 @@ class AuthSocialiteController extends Controller
                 UserActivity::create([
                     'user_id' => $existingUser->id,
                     'action' => 'register',
-                    'ip_address' => $request->ip(),
+                    'ip_address' => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $request->ip(),
                     'device' => $request->header('User-Agent')
                 ]);
             } else {
                 UserActivity::create([
                     'user_id' => $existingUser->id,
                     'action' => 'login',
-                    'ip_address' => $request->ip(),
+                    'ip_address' => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $request->ip(),
                     'device' => $request->header('User-Agent')
                 ]);
             }
