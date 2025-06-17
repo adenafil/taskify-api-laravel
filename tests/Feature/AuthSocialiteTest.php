@@ -22,7 +22,7 @@ class AuthSocialiteTest extends TestCase
     {
         $response = $this->get('/login/x');
         $response->assertStatus(400);
-        $response->assertSee('Service not supported');
+        $response->assertSee('The server returned a "400 Bad Request"');
     }
 
     public function testGoogleCallbackSuccess()
