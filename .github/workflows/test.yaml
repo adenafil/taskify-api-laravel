@@ -28,6 +28,9 @@ jobs:
     - name: Copy .env.example to .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+    - name: MAIL_FROM_NAME=avvra
+      run: echo "MAIL_FROM_NAME=avvra" >> .env
+
     - name: Generate VAPID keys and append to .env
       run: |
         # Jalankan perintah generate-vapid-keys
