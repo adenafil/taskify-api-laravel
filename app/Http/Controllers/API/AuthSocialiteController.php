@@ -35,8 +35,9 @@ class AuthSocialiteController extends Controller
                 ->first();
 
             if (!$existingUser) {
+
                 $existingUser = User::create([
-                    'name' => $socialUser->name,
+                    'name' => $socialUser->name ?? $socialUser->nickname,
                     'email' => $socialUser->email,
                     'social_id' => $socialUser->id,
                     'social_type' => $service,
